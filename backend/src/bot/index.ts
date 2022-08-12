@@ -14,6 +14,7 @@ import {
   getextra,
   update,
   getexpiring,
+  loadgamelist,
 } from "./commands";
 
 import commandParts from "./middlewares/commandParts";
@@ -50,6 +51,7 @@ Bot.use(
   getextra.run,
   update.run,
   getexpiring.run,
+  loadgamelist.run,
   stop,
   help
 );

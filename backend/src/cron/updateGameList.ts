@@ -2,7 +2,7 @@ import getAllGames from "../components/psstore/gameList";
 import getGameInfo from "../components/psstore/gameInfo";
 import GameModel from "../models/games";
 
-export const updateGameList = async () => {
+const updateGameList = async () => {
   console.time("update start");
   var todayMidnight = new Date();
   todayMidnight.setHours(0, 0, 0, 0);
@@ -31,3 +31,4 @@ export const updateGameList = async () => {
   console.log("all done");
   console.timeEnd("update start");
 };
+export default updateGameList;

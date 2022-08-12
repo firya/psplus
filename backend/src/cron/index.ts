@@ -1,8 +1,6 @@
 import Cron from "cron";
-import GameModel from "../models/games";
-import getAllGames from "../components/psstore/gameList";
-import { updateGameList } from "./updateGameList";
-
+import updateGameList from "./updateGameList";
+import getGameList from "./getGameList";
 import { sendReport } from "./dailyReport";
 
 sendReport();
@@ -10,22 +8,7 @@ sendReport();
 new Cron.CronJob(
   "0 0 * * *",
   async () => {
-    const result = await getAllGames();
-    GameModel.bulkWrite(
-      result.map((item) => ({
-        updateOne: {
-          filter: { id: item.id },
-          update: {
-            $set: {
-              id: item.id,
-              name: item.name,
-              modified: Date.now(),
-            },
-          },
-          upsert: true,
-        },
-      }))
-    );
+    await getGameList();
   },
   null,
   true,
