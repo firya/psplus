@@ -1,0 +1,5 @@
+backend/node_modules/
+docker-compose.override.yml
+.env
+init-mongo.js
+data/

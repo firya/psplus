@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "incremental": false,
+    "composite": false,
+    "target": "es2016",
+    "module": "commonjs",
+    "rootDir": "src",
+    "moduleResolution": "node",
+    "outDir": "dist",
+    "noEmit": false,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": false,
+    "skipLibCheck": true
+  },
+  "exclude": ["node_modules"]
+}
