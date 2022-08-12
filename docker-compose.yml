@@ -34,7 +34,7 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=$MONGO_ROOT_PASSWORD
       - MONGO_INITDB_DATABASE=server
     ports:
-      - "27018:27018"
+      - "27018:27017"
 
 networks:
   default:

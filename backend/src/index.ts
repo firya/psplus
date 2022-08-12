@@ -6,7 +6,7 @@ import bodyParser from "body-parser";
 import router from "./router";
 import "./cron";
 
-mongoose.connect(`mongodb://mongo:27018/server`, {
+mongoose.connect(`mongodb://mongo:27017/server`, {
   user: process.env.MONGO_USER,
   pass: process.env.MONGO_PASS,
 });
