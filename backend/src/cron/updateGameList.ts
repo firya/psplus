@@ -18,7 +18,7 @@ const updateGameList = async () => {
     const update = { $set: { modified: Date.now() } };
 
     if (gameInfo) {
-      if (game.plus?.to || game.plus.to < gameInfo.to) {
+      if (!game.plus?.to || game.plus.to < gameInfo.to) {
         update["$set"]["plus"] = { ...gameInfo, from: Date.now() };
       }
     }
