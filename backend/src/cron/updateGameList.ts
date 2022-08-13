@@ -5,7 +5,7 @@ import GameModel from "../models/games";
 const updateGameList = async () => {
   console.time("update start");
   var todayMidnight = new Date();
-  todayMidnight.setHours(0, 0, 0, 0);
+  todayMidnight.setHours(1, 0, 0, 0);
   const gameList = await GameModel.find({
     modified: { $lt: todayMidnight.getTime() },
   }).limit(100);

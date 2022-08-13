@@ -11,7 +11,6 @@ const getGameList = async () => {
           $set: {
             id: item.id,
             name: item.name,
-            modified: Date.now(),
           },
         },
         upsert: true,
