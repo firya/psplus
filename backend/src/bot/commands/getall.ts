@@ -15,8 +15,7 @@ export default {
 
     let message = `Total games: ${games.length}\n🎮 Extra games \\(${
       result["Extra"].length
-    }\\):\n
-    ${result["Extra"]
+    }\\):\n${result["Extra"]
       .map((game, i) => `${i + 1}\\. ${gameToMarkdown(game)}`)
       .join("\n")}\n🎮 Premium games \\(${
       result["Premium"].length
