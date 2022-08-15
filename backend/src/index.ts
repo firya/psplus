@@ -8,8 +8,10 @@ import "./cron";
 
 connectDB();
 
-import updateGameList from "./cron/updateGameList";
-updateGameList();
+import { getGameList } from "./components/games";
+(async () => {
+  console.log(await getGameList());
+})();
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));

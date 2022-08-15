@@ -11,7 +11,10 @@ export interface IGameData {
 }
 
 export const getGameList = async (): Promise<IGameData[]> => {
-  const games = await GameModel.find({ plus: { $exists: 1 } });
+  const games = await GameModel.find({
+    "plus.from": { $lt: Date.now() },
+    $or: [{ "plus.to": { $gt: Date.now() } }, { "plus.to": null }],
+  });
 
   return games.map((game) => gameToObject(game));
 };
