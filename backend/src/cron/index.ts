@@ -3,8 +3,6 @@ import updateGameList from "./updateGameList";
 import getGameList from "./getGameList";
 import { sendReport } from "./dailyReport";
 
-sendReport();
-
 new Cron.CronJob(
   "0 0 * * *",
   async () => {
@@ -26,7 +24,7 @@ new Cron.CronJob(
 );
 
 new Cron.CronJob(
-  "0 * * * *",
+  "0 10 * * *",
   async () => {
     await sendReport();
   },
