@@ -6,17 +6,22 @@ import bodyParser from "body-parser";
 import router from "./router";
 import "./cron";
 
-mongoose.connect(`mongodb://mongo:27017/server`, {
-  user: process.env.MONGO_USER,
-  pass: process.env.MONGO_PASS,
-});
+const connectDB = () => {
+  console.log("Try connect to mongo");
+  mongoose.connect(
+    `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@mongo:27017/server`,
+    (err) => {
+      if (err) {
+        console.log(err);
+        setTimeout(connectDB, 5000);
+      } else {
+        console.log("Connected to mongo");
+      }
+    }
+  );
+};
 
-const DB = mongoose.connection;
-
-DB.on("error", console.error.bind(console, "connection error:"));
-DB.once("open", function () {
-  console.log("MongoDB database connection established successfully");
-});
+connectDB();
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
