@@ -41,7 +41,7 @@ const updateGameList = async () => {
   if (fullGameList.length === gameList.length) {
     await Bot.telegram.sendMessage(
       process.env.TELEGRAM_DEFAULT_ADMIN,
-      `All done!`,
+      `All done\\!`,
       {
         parse_mode: "MarkdownV2",
         disable_web_page_preview: true,
