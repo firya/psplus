@@ -15,9 +15,9 @@ const getGameInfo = async (id: number): Promise<IGameInfo | null> => {
     const text = await result.text();
     const HTML = new JSDOM(text);
 
-    const psPlusText =
-      HTML.window.document.querySelector(".psw-c-t-ps-plus")?.parentNode
-        ?.parentNode?.textContent;
+    const psPlusText = HTML.window.document.querySelector(
+      ".psw-pdp-card-anchor .psw-c-t-ps-plus"
+    )?.parentNode?.parentNode?.textContent;
 
     if (psPlusText && psPlusText.includes("Subscribe")) {
       const tier = new RegExp("plus ([a-z]+)", "gi").exec(psPlusText)[1];

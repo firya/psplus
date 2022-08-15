@@ -1,4 +1,3 @@
-import getAllGames from "../components/psstore/gameList";
 import getGameInfo from "../components/psstore/gameInfo";
 import GameModel from "../models/games";
 import Bot from "../bot";
@@ -29,7 +28,7 @@ const updateGameList = async () => {
           update["$set"]["plus"] = { ...gameInfo, from: Date.now() };
         }
       } else if (game.plus?.from) {
-        update["$set"]["plus.to"] = Date.now();
+        update["$set"]["plus"] = { ...game.plus, to: Date.now() };
       }
     }
 
