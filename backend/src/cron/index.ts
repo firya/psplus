@@ -16,7 +16,7 @@ new Cron.CronJob(
 );
 
 new Cron.CronJob(
-  "*/5 * * * *",
+  "*/3 * * * *",
   async () => {
     await updateGameList();
   },
@@ -26,7 +26,7 @@ new Cron.CronJob(
 );
 
 new Cron.CronJob(
-  "25 14 * * *",
+  "0 * * * *",
   async () => {
     await sendReport();
   },

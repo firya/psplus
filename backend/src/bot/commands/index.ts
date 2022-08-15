@@ -12,3 +12,4 @@ export { default as getpremium } from "./getpremium";
 export { default as update } from "./update";
 export { default as getexpiring } from "./getexpiring";
 export { default as loadgamelist } from "./loadgamelist";
+export { default as forceupdate } from "./forceupdate";

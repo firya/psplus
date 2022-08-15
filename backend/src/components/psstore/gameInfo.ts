@@ -6,7 +6,7 @@ const baseUrl = `https://store.playstation.com/en-us/concept/`;
 interface IGameInfo {
   tier: string;
   acessType: string;
-  to: number;
+  to?: number;
 }
 
 const getGameInfo = async (id: number): Promise<IGameInfo | null> => {
@@ -35,6 +35,11 @@ const getGameInfo = async (id: number): Promise<IGameInfo | null> => {
         tier: tier,
         acessType: type,
         to: untilDate,
+      };
+    } else {
+      return {
+        tier: null,
+        acessType: null,
       };
     }
   } catch (e) {
