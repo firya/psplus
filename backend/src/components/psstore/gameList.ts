@@ -2,7 +2,7 @@ import qs from "qs";
 import fecth from "node-fetch";
 import { waiter } from "../../utils/waiter";
 
-const baseUrl = `https://web.np.playstation.com/api/graphql/v1//op`;
+const baseUrl: string = `https://web.np.playstation.com/api/graphql/v1//op`;
 
 let params: any = {
   operationName: "categoryGridRetrieve",
@@ -33,7 +33,15 @@ let params: any = {
   },
 };
 
-export const getGameList = async (size: number, offset: number) => {
+export interface IGameData {
+  name: string;
+  id: number;
+}
+
+export const getGameList = async (
+  size: number,
+  offset: number
+): Promise<IGameData[]> => {
   const newParams = { ...params };
   newParams.variables.pageArgs.size = size;
   newParams.variables.pageArgs.offset = offset;
@@ -51,7 +59,7 @@ export const getGameList = async (size: number, offset: number) => {
   }));
 };
 
-const getAllGames = async () => {
+const getAllGames = async (): Promise<IGameData[]> => {
   const size = 100;
   let resultCount = 100;
   let i = 0;

@@ -1,8 +1,8 @@
 import GameModel from "../models/games";
-import getAllGames from "../components/psstore/gameList";
+import getAllGames, { IGameData } from "../components/psstore/gameList";
 
 const getGameList = async () => {
-  const result = await getAllGames();
+  const result: IGameData[] = await getAllGames();
   GameModel.bulkWrite(
     result.map((item) => ({
       updateOne: {

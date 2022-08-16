@@ -1,35 +1,37 @@
 import getGameInfo from "../components/psstore/gameInfo";
 import GameModel from "../models/games";
 import Bot from "../bot";
+import { IGame } from "../models/games";
+import { IGameInfo } from "../components/psstore/gameInfo";
 
-const updateGameList = async () => {
+const updateGameList = async (): Promise<void> => {
   console.time("update time");
-  var todayMidnight = new Date();
+  var todayMidnight: Date = new Date();
   todayMidnight.setHours(1, 0, 0, 0);
-  const fullGameList = await GameModel.find({
+  const fullGameList: IGame[] = await GameModel.find({
     modified: { $lt: todayMidnight.getTime() },
   });
-  const gameList = await GameModel.find({
+  const gameList: IGame[] = await GameModel.find({
     modified: { $lt: todayMidnight.getTime() },
   })
     .sort({ "plus.from": -1 })
     .limit(100);
 
-  let counter = 0;
+  let counter: number = 0;
   for await (const game of gameList) {
-    const gameInfo = await getGameInfo(game.id);
+    const gameInfo: IGameInfo | null = await getGameInfo(game.id);
     console.log(`${counter}/${gameList.length}`, game.name, gameInfo);
 
     const update = { $set: { modified: Date.now() } };
 
-    if (gameInfo) {
-      if (gameInfo.tier) {
-        if (!game.plus?.to || game.plus.to < gameInfo.to) {
-          update["$set"]["plus"] = { ...gameInfo, from: Date.now() };
-        }
-      } else if (game.plus?.from) {
-        update["$set"]["plus"] = { ...game.plus, to: Date.now() };
+    if (gameInfo && gameInfo?.tier) {
+      if (!game.plus) {
+        update["$set"]["plus"] = { ...gameInfo, from: Date.now() };
+      } else if (!game.plus?.to || game.plus.to < gameInfo.to) {
+        update["$set"]["plus"] = { ...gameInfo, from: game.plus.from };
       }
+    } else if (game.plus?.from) {
+      update["$set"]["plus"] = { ...game.plus, to: Date.now() };
     }
 
     await GameModel.findOneAndUpdate({ id: game.id }, update);

@@ -1,12 +1,12 @@
 import Bot from "../";
 
-export default async (id, msg) => {
-  const MSG_LIMIT = 9192;
-  const ROW_LIMIT = 100;
-  const parts = msg.match(new RegExp(`.{1,${MSG_LIMIT}}`, "g"));
+export default async (id, msg): Promise<void> => {
+  const MSG_LIMIT: number = 9192;
+  const ROW_LIMIT: number = 100;
+  const parts: string[] = msg.match(new RegExp(`.{1,${MSG_LIMIT}}`, "g"));
   if (msg.length > MSG_LIMIT || parts.length > ROW_LIMIT) {
-    let message = "";
-    let rowCounter = 0;
+    let message: string = "";
+    let rowCounter: number = 0;
     for await (let part of parts) {
       if (part.length + message.length > MSG_LIMIT || rowCounter >= ROW_LIMIT) {
         await Bot.telegram.sendMessage(id, message, {

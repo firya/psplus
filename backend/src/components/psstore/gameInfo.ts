@@ -3,7 +3,7 @@ import { JSDOM } from "jsdom";
 
 const baseUrl = `https://store.playstation.com/en-us/concept/`;
 
-interface IGameInfo {
+export interface IGameInfo {
   tier: string;
   acessType: string;
   to?: number;

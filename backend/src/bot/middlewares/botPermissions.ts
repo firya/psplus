@@ -1,4 +1,4 @@
-import Users from "../../models/users";
+import Users, { IUser } from "../../models/users";
 
 export default () => async (ctx, next) => {
   const publicCommands: string[] = [
@@ -28,7 +28,7 @@ export default () => async (ctx, next) => {
 };
 
 export const checkUserStatus = async (id: number): Promise<string> => {
-  const getUser = await Users.findOne({ id });
+  const getUser: IUser = await Users.findOne({ id });
 
   return getUser ? getUser.status : "";
 };
