@@ -10,6 +10,7 @@ export interface IGame {
     to: number;
     acessType: string;
     tier: string;
+    updated: boolean;
   };
 }
 
@@ -23,6 +24,7 @@ const GameSchema = new Schema({
     from: { type: Number },
     to: { type: Number },
     acessType: { type: String }, // access / stream / trial
+    updated: { type: Boolean, default: false },
   },
 });
 

@@ -11,6 +11,7 @@ describe("updateGame", () => {
       to: new Date(2022, 7, 20).getTime(),
       acessType: "access",
       tier: "Extra",
+      updated: false,
     },
   };
 
@@ -26,7 +27,10 @@ describe("updateGame", () => {
     const tempGame = { ...game };
     delete tempGame.plus;
     expect(await updateGame(tempGame, gameInfo)).toEqual({
-      $set: { modified: Date.now(), plus: { ...gameInfo, from: Date.now() } },
+      $set: {
+        modified: Date.now(),
+        plus: { ...gameInfo, from: Date.now(), updated: false },
+      },
     });
   });
   test("Not in PS plus and not added", async () => {
@@ -42,7 +46,7 @@ describe("updateGame", () => {
     expect(await updateGame(tempGame, gameInfo)).toEqual({
       $set: {
         modified: Date.now(),
-        plus: { ...gameInfo, from: tempGame.plus.from },
+        plus: { ...gameInfo, from: tempGame.plus.from, updated: false },
       },
     });
   });
@@ -52,7 +56,7 @@ describe("updateGame", () => {
     expect(await updateGame(tempGame, gameInfo)).toEqual({
       $set: {
         modified: Date.now(),
-        plus: { ...gameInfo, from: tempGame.plus.from },
+        plus: { ...gameInfo, from: tempGame.plus.from, updated: false },
       },
     });
   });
@@ -61,7 +65,7 @@ describe("updateGame", () => {
     expect(await updateGame(tempGame, gameInfo)).toEqual({
       $set: {
         modified: Date.now(),
-        plus: { ...gameInfo, from: tempGame.plus.from },
+        plus: { ...gameInfo, from: tempGame.plus.from, updated: false },
       },
     });
   });
@@ -71,6 +75,61 @@ describe("updateGame", () => {
       $set: {
         modified: Date.now(),
         plus: { ...tempGame.plus, to: Date.now() },
+      },
+    });
+  });
+  test("Updated PS plus info without <to>", async () => {
+    const tempGame = { ...game };
+    tempGame.plus.updated = true;
+    tempGame.plus.to = null;
+    const tempGameInfo = {
+      tier: "Premium",
+      acessType: "stream",
+      to: new Date(2022, 7, 31).getTime(),
+    };
+    expect(await updateGame(tempGame, tempGameInfo)).toEqual({
+      $set: {
+        modified: Date.now(),
+        plus: {
+          ...tempGameInfo,
+          updated: false,
+          from: Date.now(),
+        },
+      },
+    });
+  });
+  test("Updated PS plus info with <to> less then now", async () => {
+    const tempGame = { ...game };
+    tempGame.plus.updated = true;
+    tempGame.plus.to = new Date(2022, 7, 1).getTime();
+    const tempGameInfo = {
+      tier: "Premium",
+      acessType: "stream",
+      to: new Date(2022, 7, 31).getTime(),
+    };
+    expect(await updateGame(tempGame, tempGameInfo)).toEqual({
+      $set: {
+        modified: Date.now(),
+        plus: {
+          ...tempGameInfo,
+          updated: false,
+          from: Date.now(),
+        },
+      },
+    });
+  });
+  test("Updated PS plus info with <to> greater then new", async () => {
+    const tempGame = { ...game };
+    tempGame.plus.updated = true;
+    tempGame.plus.to = new Date(2022, 8, 1).getTime();
+    const tempGameInfo = {
+      tier: "Premium",
+      acessType: "stream",
+      to: new Date(2022, 7, 31).getTime(),
+    };
+    expect(await updateGame(tempGame, tempGameInfo)).toEqual({
+      $set: {
+        modified: Date.now(),
       },
     });
   });

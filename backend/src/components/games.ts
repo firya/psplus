@@ -8,6 +8,7 @@ export interface IGameData {
   to: number;
   acessType: string;
   tier: string;
+  updated: boolean;
 }
 
 export const getGameList = async (): Promise<IGameData[]> => {
@@ -39,6 +40,7 @@ export const gameToObject = (game: IGame): IGameData => {
     to: game.plus.to,
     acessType: game.plus.acessType,
     tier: game.plus.tier,
+    updated: game.plus.updated,
   };
 };
 
