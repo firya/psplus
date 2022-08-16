@@ -22,19 +22,8 @@ const updateGameList = async (): Promise<void> => {
     const gameInfo: IGameInfo | null = await getGameInfo(game.id);
     console.log(`${counter}/${gameList.length}`, game.name, gameInfo);
 
-    const update = { $set: { modified: Date.now() } };
-
-    if (gameInfo && gameInfo?.tier) {
-      if (!game.plus) {
-        update["$set"]["plus"] = { ...gameInfo, from: Date.now() };
-      } else if (!game.plus?.to || game.plus.to < gameInfo.to) {
-        update["$set"]["plus"] = { ...gameInfo, from: game.plus.from };
-      }
-    } else if (game.plus?.from) {
-      update["$set"]["plus"] = { ...game.plus, to: Date.now() };
-    }
-
-    await GameModel.findOneAndUpdate({ id: game.id }, update);
+    const resUpdate = await updateGame(game, gameInfo);
+    await GameModel.findOneAndUpdate({ id: game.id }, resUpdate);
 
     counter++;
   }
@@ -53,3 +42,22 @@ const updateGameList = async (): Promise<void> => {
   console.timeEnd("update time");
 };
 export default updateGameList;
+
+export const updateGame = async (
+  game: IGame,
+  gameInfo: IGameInfo | null
+): Promise<any> => {
+  const update = { $set: { modified: Date.now() } };
+
+  if (gameInfo && gameInfo?.tier) {
+    if (!game.plus) {
+      update["$set"]["plus"] = { ...gameInfo, from: Date.now() };
+    } else if (!game.plus?.to || game.plus.to < gameInfo.to) {
+      update["$set"]["plus"] = { ...gameInfo, from: game.plus.from };
+    }
+  } else if (game.plus?.from) {
+    update["$set"]["plus"] = { ...game.plus, to: Date.now() };
+  }
+
+  return update;
+};
