@@ -24,7 +24,7 @@ new Cron.CronJob(
 );
 
 new Cron.CronJob(
-  "0 11 * * *",
+  "0 10 * * *",
   async () => {
     await sendReport();
   },
