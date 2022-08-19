@@ -9,7 +9,7 @@ export default {
 
     const result = games.filter((game) => game.tier === "Premium");
 
-    let message = `🎮 Total games \\(${result.length}\\):\n${result
+    let message = `🎮 Premium games \\(${result.length}\\):\n${result
       .map((game, i) => `${i + 1}\\. ${gameToMarkdown(game)}`)
       .join("\n")}`;
 
