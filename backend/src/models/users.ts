@@ -9,7 +9,7 @@ export interface IUser {
   };
 }
 
-const UserSchema = new Schema({
+const UserSchema = new Schema<IUser>({
   id: { type: Number, required: true },
   status: {
     type: String,

@@ -14,13 +14,13 @@ export interface IGame {
   };
 }
 
-const GameSchema = new Schema({
+const GameSchema = new Schema<IGame>({
   id: { type: Number, required: true, unique: true },
   name: { type: String, required: true },
   modified: { type: Number },
   created: { type: Number, default: () => Date.now() },
   plus: {
-    tier: { type: String },
+    tier: { type: String }, // Premium / Extra
     from: { type: Number },
     to: { type: Number },
     acessType: { type: String }, // access / stream / trial
