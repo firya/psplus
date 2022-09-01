@@ -20,3 +20,6 @@ app.use(express.static("public", { extensions: ["html"] }));
 app.listen(3001, () => {
   console.log(`Example app listening on port 3001!`);
 });
+
+// import updateGameList from "./cron/updateGameList";
+// (async () => await updateGameList())();

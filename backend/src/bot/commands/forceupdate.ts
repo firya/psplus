@@ -1,5 +1,6 @@
 import { Composer } from "telegraf";
 import GameModel from "../../models/games";
+import updateGameList from "../../cron/updateGameList";
 
 export default {
   help: "/forceupdate — Force update of PS Plus list",
@@ -11,7 +12,7 @@ export default {
         {},
         { $set: { modified: yesterday.getTime() } }
       );
-      ctx.reply("👍");
+      ctx.reply("Upadte will start soon...");
     } catch (e) {
       ctx.reply(e._message);
     }

@@ -6,7 +6,9 @@ import { sendReport } from "./dailyReport";
 new Cron.CronJob(
   "0 0 * * *",
   async () => {
-    await getGameList();
+    if (process.env.NODE_ENV === "production") {
+      await getGameList();
+    }
   },
   null,
   true,
@@ -16,7 +18,9 @@ new Cron.CronJob(
 new Cron.CronJob(
   "*/3 * * * *",
   async () => {
-    await updateGameList();
+    if (process.env.NODE_ENV === "production") {
+      await updateGameList();
+    }
   },
   null,
   true,

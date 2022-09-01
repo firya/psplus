@@ -1,17 +1,30 @@
 import { model, Schema } from "mongoose";
 
+export interface IPlusInfo {
+  from?: number;
+  to?: number;
+  acessType: string;
+  tier: string;
+  updated?: boolean;
+}
+
+export interface IGameData {
+  description: string;
+  metacritic: number;
+  background_image: string;
+  platforms: string[];
+  esrb_rating: string;
+  modified: number;
+  released: number;
+}
+
 export interface IGame {
   id: number;
   name: string;
   modified: number;
   created: number;
-  plus?: {
-    from: number;
-    to: number;
-    acessType: string;
-    tier: string;
-    updated: boolean;
-  };
+  plus?: IPlusInfo;
+  data?: IGameData;
 }
 
 const GameSchema = new Schema<IGame>({
@@ -25,6 +38,15 @@ const GameSchema = new Schema<IGame>({
     to: { type: Number },
     acessType: { type: String }, // access / stream / trial
     updated: { type: Boolean, default: false },
+  },
+  data: {
+    description: { type: String },
+    metacritic: { type: Number },
+    released: { type: Number },
+    background_image: { type: String },
+    platforms: [{ type: String }],
+    esrb_rating: { type: String },
+    modified: { type: Number },
   },
 });
 
