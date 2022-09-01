@@ -20,6 +20,7 @@ import {
 
 import commandParts from "./middlewares/commandParts";
 import botPermissions from "./middlewares/botPermissions";
+import inline from "./inline";
 
 const token = process.env.TELEGRAM_TOKEN;
 if (token === undefined) {
@@ -41,6 +42,7 @@ try {
 }
 
 Bot.use(
+  inline,
   myid.run,
   adduser.run,
   removeuser.run,

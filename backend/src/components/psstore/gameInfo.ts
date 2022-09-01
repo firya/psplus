@@ -80,11 +80,13 @@ const getRawgData = async (name: string): Promise<IGameData> => {
       platforms: json.results[0].platforms.map(
         (platform) => platform.platform.name
       ),
-      esrb_rating: json.results[0].esrb_rating || null,
+      esrb_rating: json.results[0].esrb_rating.name || null,
       released: new Date(json.results[0].released).getTime() || null,
       modified: Date.now(),
     };
   }
+
+  console.log(result);
 
   return result as IGameData;
 };

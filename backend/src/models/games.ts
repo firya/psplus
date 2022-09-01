@@ -44,6 +44,7 @@ const GameSchema = new Schema<IGame>({
     metacritic: { type: Number },
     released: { type: Number },
     background_image: { type: String },
+    genres: [{ type: String }],
     platforms: [{ type: String }],
     esrb_rating: { type: String },
     modified: { type: Number },
