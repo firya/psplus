@@ -57,8 +57,9 @@ export const updateGame = async (
   game: IGame,
   gameInfo: IGameInfo | null
 ): Promise<any> => {
-  console.log(game.id);
-  const update = { $set: { modified: Date.now(), data: gameInfo.data } };
+  const update = { $set: { modified: Date.now() } };
+
+  update["$set"]["data"] = gameInfo.data;
 
   if (gameInfo?.plus.tier) {
     if (!game.plus || (game.plus?.to < Date.now() && game.plus.updated)) {

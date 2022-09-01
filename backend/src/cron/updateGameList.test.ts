@@ -1,3 +1,4 @@
+import { IGameInfo } from "../components/psstore/gameInfo";
 import { updateGame } from "./updateGameList";
 
 describe("updateGame", () => {
@@ -16,10 +17,13 @@ describe("updateGame", () => {
   };
 
   const gameInfo = {
-    tier: "Extra",
-    acessType: "access",
-    to: new Date(2022, 7, 31).getTime(),
-  };
+    plus: {
+      tier: "Extra",
+      acessType: "access",
+      to: new Date(2022, 7, 31).getTime(),
+    },
+    data: {},
+  } as IGameInfo;
 
   Date.now = jest.fn(() => new Date(Date.UTC(2022, 7, 16, 11, 0, 0)).valueOf());
 
@@ -30,14 +34,17 @@ describe("updateGame", () => {
       $set: {
         modified: Date.now(),
         plus: { ...gameInfo, from: Date.now(), updated: false },
+        data: {},
       },
     });
   });
   test("Not in PS plus and not added", async () => {
     const tempGame = { ...game };
     delete tempGame.plus;
-    expect(await updateGame(tempGame, null)).toEqual({
-      $set: { modified: Date.now() },
+    expect(
+      await updateGame(tempGame, { plus: {}, data: {} } as IGameInfo)
+    ).toEqual({
+      $set: { modified: Date.now(), data: {} },
     });
   });
   test("In PS plus but no <to> date and get new", async () => {
@@ -47,6 +54,7 @@ describe("updateGame", () => {
       $set: {
         modified: Date.now(),
         plus: { ...gameInfo, from: tempGame.plus.from, updated: false },
+        data: {},
       },
     });
   });
@@ -57,6 +65,7 @@ describe("updateGame", () => {
       $set: {
         modified: Date.now(),
         plus: { ...gameInfo, from: tempGame.plus.from, updated: false },
+        data: {},
       },
     });
   });
@@ -66,15 +75,19 @@ describe("updateGame", () => {
       $set: {
         modified: Date.now(),
         plus: { ...gameInfo, from: tempGame.plus.from, updated: false },
+        data: {},
       },
     });
   });
   test("In PS plus but was removed", async () => {
     const tempGame = { ...game };
-    expect(await updateGame(tempGame, null)).toEqual({
+    expect(
+      await updateGame(tempGame, { plus: {}, data: {} } as IGameInfo)
+    ).toEqual({
       $set: {
         modified: Date.now(),
         plus: { ...tempGame.plus, to: Date.now() },
+        data: {},
       },
     });
   });
@@ -83,10 +96,13 @@ describe("updateGame", () => {
     tempGame.plus.updated = true;
     tempGame.plus.to = null;
     const tempGameInfo = {
-      tier: "Premium",
-      acessType: "stream",
-      to: new Date(2022, 7, 31).getTime(),
-    };
+      plus: {
+        tier: "Premium",
+        acessType: "stream",
+        to: new Date(2022, 7, 31).getTime(),
+      },
+      data: {},
+    } as IGameInfo;
     expect(await updateGame(tempGame, tempGameInfo)).toEqual({
       $set: {
         modified: Date.now(),
@@ -95,6 +111,7 @@ describe("updateGame", () => {
           updated: false,
           from: Date.now(),
         },
+        data: {},
       },
     });
   });
@@ -103,10 +120,13 @@ describe("updateGame", () => {
     tempGame.plus.updated = true;
     tempGame.plus.to = new Date(2022, 7, 1).getTime();
     const tempGameInfo = {
-      tier: "Premium",
-      acessType: "stream",
-      to: new Date(2022, 7, 31).getTime(),
-    };
+      plus: {
+        tier: "Premium",
+        acessType: "stream",
+        to: new Date(2022, 7, 31).getTime(),
+      },
+      data: {},
+    } as IGameInfo;
     expect(await updateGame(tempGame, tempGameInfo)).toEqual({
       $set: {
         modified: Date.now(),
@@ -115,6 +135,7 @@ describe("updateGame", () => {
           updated: false,
           from: Date.now(),
         },
+        data: {},
       },
     });
   });
@@ -123,13 +144,17 @@ describe("updateGame", () => {
     tempGame.plus.updated = true;
     tempGame.plus.to = new Date(2022, 8, 1).getTime();
     const tempGameInfo = {
-      tier: "Premium",
-      acessType: "stream",
-      to: new Date(2022, 7, 31).getTime(),
-    };
+      plus: {
+        tier: "Premium",
+        acessType: "stream",
+        to: new Date(2022, 7, 31).getTime(),
+      },
+      data: {},
+    } as IGameInfo;
     expect(await updateGame(tempGame, tempGameInfo)).toEqual({
       $set: {
         modified: Date.now(),
+        data: {},
       },
     });
   });
