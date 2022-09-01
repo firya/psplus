@@ -1,4 +1,4 @@
-import { dayBetween } from "./date";
+import { dayBetween, unixtimeToDate } from "./date";
 
 describe("dayBetween", () => {
   test("Correct", () => {
@@ -20,5 +20,12 @@ describe("dayBetween", () => {
     const date1 = -1 * 60 * 60 * 24 * 1000;
     const date2 = -5 * 60 * 60 * 24 * 1000;
     expect(dayBetween(date1, date2)).toBe(-4);
+  });
+});
+
+describe("unixtimeToDate", () => {
+  const unixtime = new Date(2020, 0, 28).getTime();
+  test("Correct", () => {
+    expect(unixtimeToDate(unixtime)).toBe("1/28/2020");
   });
 });

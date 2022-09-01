@@ -35,6 +35,8 @@ const getGameList = async (query: string): Promise<ImessageProps[]> => {
       $regex: query,
       $options: "i",
     },
+    "plus.from": { $lt: Date.now() },
+    $or: [{ "plus.to": { $gt: Date.now() } }, { "plus.to": null }],
     limit: 50,
   });
 
@@ -43,11 +45,14 @@ const getGameList = async (query: string): Promise<ImessageProps[]> => {
   for (const record of records) {
     results.push({
       title: record.name,
+      tier: record.plus.tier,
+      accessType: record.plus.acessType,
+      to: record.plus.to,
       image: record.data.background_image,
       url: `https://store.playstation.com/en-us/concept/${record.id}`,
       platforms: record.data.platforms,
       rating: record.data.metacritic,
-      release: unixtimeToDate(record.data.released),
+      release: record.data.released,
     });
   }
 
@@ -62,7 +67,14 @@ const getGameList = async (query: string): Promise<ImessageProps[]> => {
 const generateMessage = (row): string => {
   let message: string = `*${row.title}*\n`;
 
-  if (row.url !== "") {
+  if (row.tier) {
+    message += `\nPS Plus Tier: ${row.tier} (${row.accessType})`;
+  }
+
+  if (row.to) {
+    message += `\nExpiring: ${unixtimeToDate(row.to)}`;
+  }
+  if (row.url) {
     try {
       const parsedUrl = new URL(row.url);
       message += `\n[${parsedUrl.hostname}](${row.url})`;
@@ -70,14 +82,14 @@ const generateMessage = (row): string => {
       message += `\n[${row.url}](${row.url})`;
     }
   }
-  if (row.platforms !== "") {
-    message += `\nПлатформы: ${row.platforms}`;
+  if (row.platforms) {
+    message += `\nPlatforms: ${row.platforms.join(", ")}`;
   }
-  if (row.rating !== "") {
-    message += `\nРейтинг: ${row.rating}`;
+  if (row.rating) {
+    message += `\nRating: ${row.rating}`;
   }
-  if (row.release !== "") {
-    message += `\nДата релиза: ${row.release}`;
+  if (row.release) {
+    message += `\nReleased: ${unixtimeToDate(row.release)}`;
   }
 
   return message;
