@@ -73,7 +73,7 @@ export const updateGame = async (
       !game.plus.updated
     ) {
       update["$set"]["plus"] = {
-        ...gameInfo,
+        ...gameInfo.plus,
         from: game.plus.from,
         updated: false,
       };

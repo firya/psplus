@@ -82,9 +82,6 @@ const generateMessage = (row): string => {
       message += `\n[${row.url}](${row.url})`;
     }
   }
-  if (row.platforms) {
-    message += `\nPlatforms: ${row.platforms.join(", ")}`;
-  }
   if (row.rating) {
     message += `\nRating: ${row.rating}`;
   }
