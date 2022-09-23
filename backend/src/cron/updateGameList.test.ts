@@ -33,7 +33,7 @@ describe("updateGame", () => {
     expect(await updateGame(tempGame, gameInfo)).toEqual({
       $set: {
         modified: Date.now(),
-        plus: { ...gameInfo, from: Date.now(), updated: false },
+        plus: { ...gameInfo.plus, from: Date.now() },
         data: {},
       },
     });
@@ -53,7 +53,7 @@ describe("updateGame", () => {
     expect(await updateGame(tempGame, gameInfo)).toEqual({
       $set: {
         modified: Date.now(),
-        plus: { ...gameInfo, from: tempGame.plus.from, updated: false },
+        plus: { ...gameInfo.plus, from: tempGame.plus.from },
         data: {},
       },
     });
@@ -61,10 +61,12 @@ describe("updateGame", () => {
   test("In PS plus but no <to> date and don't get it", async () => {
     const tempGame = { ...game };
     tempGame.plus.to = null;
-    expect(await updateGame(tempGame, gameInfo)).toEqual({
+    const tempGameInfo = { ...gameInfo };
+    tempGameInfo.plus.to = null;
+    expect(await updateGame(tempGame, tempGameInfo)).toEqual({
       $set: {
         modified: Date.now(),
-        plus: { ...gameInfo, from: tempGame.plus.from, updated: false },
+        plus: { ...gameInfo.plus, from: tempGame.plus.from },
         data: {},
       },
     });
@@ -74,7 +76,7 @@ describe("updateGame", () => {
     expect(await updateGame(tempGame, gameInfo)).toEqual({
       $set: {
         modified: Date.now(),
-        plus: { ...gameInfo, from: tempGame.plus.from, updated: false },
+        plus: { ...gameInfo.plus, from: tempGame.plus.from },
         data: {},
       },
     });
@@ -107,9 +109,8 @@ describe("updateGame", () => {
       $set: {
         modified: Date.now(),
         plus: {
-          ...tempGameInfo,
-          updated: false,
-          from: Date.now(),
+          ...tempGameInfo.plus,
+          from: tempGame.plus.from,
         },
         data: {},
       },
@@ -131,8 +132,7 @@ describe("updateGame", () => {
       $set: {
         modified: Date.now(),
         plus: {
-          ...tempGameInfo,
-          updated: false,
+          ...tempGameInfo.plus,
           from: Date.now(),
         },
         data: {},

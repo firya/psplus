@@ -14,6 +14,7 @@ const updateGameList = async (force: boolean = false): Promise<void> => {
     todayMidnight.setHours(1, 0, 0, 0);
 
     filter = {
+      ...filter,
       modified: { $lt: todayMidnight.getTime() },
     };
 
@@ -62,20 +63,18 @@ export const updateGame = async (
   update["$set"]["data"] = gameInfo.data;
 
   if (gameInfo?.plus.tier) {
-    if (!game.plus || (game.plus?.to < Date.now() && game.plus.updated)) {
-      update["$set"]["plus"] = {
-        ...gameInfo,
-        updated: false,
-        from: Date.now(),
-      };
-    } else if (
-      (!game.plus?.to || game.plus.to < gameInfo.plus.to) &&
-      !game.plus.updated
+    if (
+      !game.plus ||
+      (gameInfo.plus.to && game.plus?.to && game.plus?.to < Date.now())
     ) {
       update["$set"]["plus"] = {
         ...gameInfo.plus,
+        from: Date.now(),
+      };
+    } else if (!game.plus?.to || game.plus.to < gameInfo.plus.to) {
+      update["$set"]["plus"] = {
+        ...gameInfo.plus,
         from: game.plus.from,
-        updated: false,
       };
     }
   } else if (game.plus?.from) {
