@@ -35,8 +35,8 @@ const getGameList = async (query: string): Promise<ImessageProps[]> => {
       $regex: query,
       $options: "i",
     },
-    "plus.from": { $lt: Date.now() },
-    $or: [{ "plus.to": { $gt: Date.now() } }, { "plus.to": null }],
+    // "plus.from": { $lt: Date.now() },
+    // $or: [{ "plus.to": { $gt: Date.now() } }, { "plus.to": null }],
     limit: 50,
   });
 
@@ -47,6 +47,7 @@ const getGameList = async (query: string): Promise<ImessageProps[]> => {
       title: record.name,
       tier: record.plus.tier,
       accessType: record.plus.acessType,
+      modified: record.modified,
       to: record.plus.to,
       image: record.data.background_image,
       url: `https://store.playstation.com/en-us/concept/${record.id}`,
@@ -67,10 +68,13 @@ const getGameList = async (query: string): Promise<ImessageProps[]> => {
 const generateMessage = (row): string => {
   let message: string = `*${row.title}*\n`;
 
-  if (row.tier) {
-    message += `\nPS Plus Tier: ${row.tier} (${row.accessType})`;
+  if (row.modified) {
+    message += `\n__Lats update: ${unixtimeToDate(row.modified)}__`;
   }
 
+  if (row.tier) {
+    message += `\n❗PS Plus Tier: ${row.tier} (${row.accessType})`;
+  }
   if (row.to) {
     message += `\nExpiring: ${unixtimeToDate(row.to)}`;
   }

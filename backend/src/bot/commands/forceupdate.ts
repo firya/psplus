@@ -1,6 +1,5 @@
 import { Composer } from "telegraf";
 import GameModel from "../../models/games";
-import updateGameList from "../../cron/updateGameList";
 
 export default {
   help: "/forceupdate — Force update of PS Plus list",

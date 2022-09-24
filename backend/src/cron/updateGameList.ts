@@ -9,7 +9,7 @@ const updateGameList = async (force: boolean = false): Promise<void> => {
 
   let filter = {};
   let fullGameList: IGame[] = [];
-  if (force) {
+  if (!force) {
     var todayMidnight: Date = new Date();
     todayMidnight.setHours(1, 0, 0, 0);
 
@@ -21,7 +21,7 @@ const updateGameList = async (force: boolean = false): Promise<void> => {
     fullGameList = await GameModel.find(filter);
   }
   const gameList: IGame[] = await GameModel.find(filter)
-    .sort({ "plus.from": -1 })
+    // .sort({ "plus.from": -1 })
     .limit(100);
 
   let counter: number = 0;
