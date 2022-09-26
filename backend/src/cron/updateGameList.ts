@@ -63,19 +63,30 @@ export const updateGame = async (
   update["$set"]["data"] = gameInfo.data;
 
   if (gameInfo?.plus.tier) {
-    if (
-      !game.plus ||
-      (gameInfo.plus.to && game.plus?.to && game.plus?.to < Date.now())
-    ) {
+    if (!game.plus) {
       update["$set"]["plus"] = {
         ...gameInfo.plus,
         from: Date.now(),
       };
-    } else if (!game.plus?.to || game.plus.to < gameInfo.plus.to) {
-      update["$set"]["plus"] = {
-        ...gameInfo.plus,
-        from: game.plus.from,
-      };
+    } else {
+      if (!game.plus?.from) {
+        update["$set"]["plus"] = {
+          ...gameInfo.plus,
+          from: Date.now(),
+        };
+      } else {
+        if (game.plus.to && game.plus.to < Date.now()) {
+          update["$set"]["plus"] = {
+            ...gameInfo.plus,
+            from: Date.now(),
+          };
+        } else {
+          update["$set"]["plus"] = {
+            ...gameInfo.plus,
+            from: game.plus.from,
+          };
+        }
+      }
     }
   } else if (game.plus?.from) {
     update["$set"]["plus"] = { ...game.plus, to: Date.now() };
