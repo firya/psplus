@@ -24,7 +24,7 @@ export const sendReport = async () => {
   let message: string = "";
   if (newGames.length > 0) {
     message += `New games:\n${newGames
-      .map((game, i) => `${i + 1}\\. ${gameToMarkdown(game)}`)
+      .map((game, i) => `${i + 1}\\. ${gameToMarkdown(game, true)}`)
       .join("\n")}`;
   }
   if (expiringGames.length > 0) {
@@ -32,7 +32,7 @@ export const sendReport = async () => {
     message += `Expiring games:\n${expiringGames
       .map(
         (game, i) =>
-          `${i + 1}\\. ${gameToMarkdown(game)} \— \\(${dayBetween(
+          `${i + 1}\\. ${gameToMarkdown(game, true)} \— \\(${dayBetween(
             Date.now(),
             game.to
           )} days\\)`

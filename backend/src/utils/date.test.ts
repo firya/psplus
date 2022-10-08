@@ -26,6 +26,6 @@ describe("dayBetween", () => {
 describe("unixtimeToDate", () => {
   const unixtime = new Date(2020, 0, 28).getTime();
   test("Correct", () => {
-    expect(unixtimeToDate(unixtime)).toBe("1/28/2020");
+    expect(unixtimeToDate(unixtime)).toBe("28.01.2020");
   });
 });

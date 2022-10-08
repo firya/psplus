@@ -17,7 +17,7 @@ export default {
       result["Extra"].length
     }\\):\n${result["Extra"]
       .map((game, i) => `${i + 1}\\. ${gameToMarkdown(game)}`)
-      .join("\n")}\n🎮 Premium games \\(${
+      .join("\n")}\n\n🎮 Premium games \\(${
       result["Premium"].length
     }\\):\n${result["Premium"]
       .map((game, i) => `${i + 1}\\. ${gameToMarkdown(game)}`)

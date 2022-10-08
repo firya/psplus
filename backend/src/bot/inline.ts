@@ -69,7 +69,7 @@ const generateMessage = (row): string => {
   let message: string = `*${row.title}*\n`;
 
   if (row.modified) {
-    message += `\n__Lats update: ${unixtimeToDate(row.modified)}__`;
+    message += `\nLats update: ${unixtimeToDate(row.modified, true)}__`;
   }
 
   if (row.tier) {
