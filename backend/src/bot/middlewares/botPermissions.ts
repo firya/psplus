@@ -10,6 +10,7 @@ export default () => async (ctx, next) => {
     "getextra",
     "getpremium",
     "getexpiring",
+    "reportnow",
   ];
 
   if (ctx.channelPost || ctx.message) {
