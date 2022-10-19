@@ -15,7 +15,14 @@ const updateGameList = async (force: boolean = false): Promise<void> => {
 
     filter = {
       ...filter,
-      modified: { $lt: todayMidnight.getTime() },
+      $or: [
+        {
+          modified: { $lt: todayMidnight.getTime() },
+        },
+        {
+          modified: { $exists: false },
+        },
+      ],
     };
 
     fullGameList = await GameModel.find(filter);
