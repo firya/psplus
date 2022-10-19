@@ -13,3 +13,4 @@ export { default as update } from "./update";
 export { default as getexpiring } from "./getexpiring";
 export { default as loadgamelist } from "./loadgamelist";
 export { default as forceupdate } from "./forceupdate";
+export { default as reportnow } from "./reportnow";

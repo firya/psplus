@@ -4,6 +4,18 @@ import Users, { IUser } from "../models/users";
 import { dayBetween } from "../utils/date";
 
 export const sendReport = async () => {
+  let message: string = await prepareReport();
+
+  if (message.length > 0) {
+    const userList: IUser[] = await Users.find({ "report.on": true });
+
+    userList.forEach((user) => {
+      sendLongMessage(user.id, message);
+    });
+  }
+};
+
+export const prepareReport = async (): Promise<string> => {
   const DAY_BEFORE: number[] = [14, 30];
   const gameList: IGameData[] = await getGameList();
 
@@ -40,11 +52,5 @@ export const sendReport = async () => {
       .join("\n")}`;
   }
 
-  if (message.length > 0) {
-    const userList: IUser[] = await Users.find({ "report.on": true });
-
-    userList.forEach((user) => {
-      sendLongMessage(user.id, message);
-    });
-  }
+  return message;
 };

@@ -16,6 +16,7 @@ import {
   getexpiring,
   loadgamelist,
   forceupdate,
+  reportnow,
 } from "./commands";
 
 import commandParts from "./middlewares/commandParts";
@@ -56,6 +57,7 @@ Bot.use(
   getexpiring.run,
   loadgamelist.run,
   forceupdate.run,
+  reportnow.run,
   stop,
   help
 );
