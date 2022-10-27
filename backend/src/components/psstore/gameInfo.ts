@@ -34,7 +34,7 @@ const getPSStore = async (id: number): Promise<IPlusInfo> => {
 
   const psPlusText = HTML.window.document.querySelector(
     "[data-qa='mfeCtaMain#offer0#discountInfo']"
-  )?.textContent;
+  )?.parentNode?.parentNode?.textContent;
 
   if (psPlusText && psPlusText.includes("Subscribe")) {
     let tier: string = new RegExp("plus ([a-z]+)", "gi").exec(psPlusText)[1];
