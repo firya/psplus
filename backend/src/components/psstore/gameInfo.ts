@@ -32,11 +32,17 @@ const getPSStore = async (id: number): Promise<IPlusInfo> => {
   const text = await htmlContent.text();
   const HTML = new JSDOM(text);
 
-  const psPlusText = HTML.window.document.querySelector(
-    "[data-qa='mfeCtaMain#offer0#discountInfo']"
-  )?.parentNode?.parentNode?.textContent;
+  const container = HTML.window.document.querySelector(
+    "[data-qa='mfeCtaMain']"
+  );
+  const psPlusText = container?.querySelector(
+    "[data-qa$=discountInfo]"
+  )?.textContent;
+  const psPlusEndText = container?.querySelector(
+    "[data-qa$=discountDescriptor]"
+  )?.textContent;
 
-  if (psPlusText && psPlusText.includes("Subscribe")) {
+  if (psPlusText) {
     let tier: string = new RegExp("plus ([a-z]+)", "gi").exec(psPlusText)[1];
     let type: string = "access";
 
@@ -47,8 +53,13 @@ const getPSStore = async (id: number): Promise<IPlusInfo> => {
       type = "trial";
     }
 
-    const until = new RegExp("Offer ends (.*)", "gi").exec(psPlusText);
-    const untilDate = until ? new Date(until[1]).getTime() : null;
+    let untilDate = null;
+    if (psPlusEndText) {
+      const until = new RegExp("Offer ends ([0-9/ :GMT+]+)", "gi").exec(
+        psPlusText
+      );
+      untilDate = until ? new Date(until[1]).getTime() : null;
+    }
 
     return {
       tier: tier,
