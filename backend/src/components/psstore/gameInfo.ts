@@ -26,7 +26,7 @@ const getGameInfo = async (game: IGame): Promise<IGameInfo | null> => {
 
 export default getGameInfo;
 
-const getPSStore = async (id: number): Promise<IPlusInfo> => {
+export const getPSStore = async (id: number): Promise<IPlusInfo> => {
   const baseUrl = `https://store.playstation.com/en-us/concept/`;
   const htmlContent = await fetch(`${baseUrl}${id}`);
   const text = await htmlContent.text();
@@ -56,7 +56,7 @@ const getPSStore = async (id: number): Promise<IPlusInfo> => {
     let untilDate = null;
     if (psPlusEndText) {
       const until = new RegExp("Offer ends ([0-9/ :GMT+]+)", "gi").exec(
-        psPlusText
+        psPlusEndText
       );
       untilDate = until ? new Date(until[1]).getTime() : null;
     }
