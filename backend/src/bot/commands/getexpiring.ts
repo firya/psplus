@@ -21,13 +21,13 @@ export default {
     let message = "❌ No games expiring in the next " + MAX_DAYS + " days";
     if (expiringGames.length > 0) {
       message = `🎮 Expiring games:\n${expiringGames
-        .map(
-          (game, i) =>
-            `${i + 1}\\. ${gameToMarkdown(game, true)} \— \\(${dayBetween(
-              Date.now(),
-              game.to
-            )} days\\)`
-        )
+        .map((game, i) => {
+          const remainDays = dayBetween(Date.now(), game.to);
+          return `${i + 1}\\. ${gameToMarkdown(
+            game,
+            true
+          )} \— \\(${remainDays} ${remainDays === 1 ? "day" : "days"}\\)`;
+        })
         .join("\n")}`;
     }
 
