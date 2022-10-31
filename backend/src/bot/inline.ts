@@ -4,6 +4,7 @@ import GameModel from "../models/games";
 import { unixtimeToDate } from "../utils/date";
 
 interface ImessageProps {
+  id: number;
   image: string;
   title: string;
   description: string;
@@ -21,6 +22,11 @@ export default Composer.on("inline_query", async (ctx) => {
       thumb_url: item.image,
       title: item.title,
       description: item.description,
+      reply_markup: {
+        inline_keyboard: [
+          [{ text: "Update", callback_data: "update " + item.id }],
+        ],
+      },
       input_message_content: {
         message_text: item.message,
         parse_mode: "Markdown",
@@ -44,6 +50,7 @@ const getGameList = async (query: string): Promise<ImessageProps[]> => {
 
   for (const record of records) {
     results.push({
+      id: record.id,
       title: record.name,
       tier: record.plus.tier,
       accessType: record.plus.acessType,
@@ -58,6 +65,7 @@ const getGameList = async (query: string): Promise<ImessageProps[]> => {
   }
 
   return results.map((item) => ({
+    id: item.id,
     image: item.image,
     title: item.title,
     description: item.description,
@@ -69,19 +77,22 @@ const generateMessage = (row): string => {
   let message: string = `*${row.title}*\n`;
 
   if (row.modified) {
-    message += `\nLats update: ${unixtimeToDate(row.modified, true)}__`;
+    message += `\n__Lats update: ${unixtimeToDate(row.modified, true)}__`;
   }
 
-  if (row.tier) {
-    message += `\n❗PS Plus Tier: ${row.tier} (${row.accessType})`;
+  if (!row.to || row.to > Date.now()) {
+    if (row.tier) {
+      message += `\n❗PS Plus Tier: ${row.tier} (${row.accessType})`;
+    }
+    if (row.to) {
+      message += `\nExpiring: ${unixtimeToDate(row.to)}`;
+    }
   }
-  if (row.to) {
-    message += `\nExpiring: ${unixtimeToDate(row.to)}`;
-  }
+
   if (row.url) {
     try {
       const parsedUrl = new URL(row.url);
-      message += `\n[${parsedUrl.hostname}](${row.url})`;
+      message += `\n[${parsedUrl.hostname}](${row.url}) \(id: ${row.id}\)`;
     } catch (e) {
       message += `\n[${row.url}](${row.url})`;
     }

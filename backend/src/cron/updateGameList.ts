@@ -4,29 +4,37 @@ import Bot from "../bot";
 import { IGame } from "../models/games";
 import { IGameInfo } from "../components/psstore/gameInfo";
 
-const updateGameList = async (force: boolean = false): Promise<void> => {
+const updateGameList = async (ids: number[] = []): Promise<void> => {
   console.time("update time");
 
-  let filter = {};
   let fullGameList: IGame[] = [];
-  if (!force) {
-    var todayMidnight: Date = new Date();
-    todayMidnight.setHours(1, 0, 0, 0);
+  let todayMidnight: Date = new Date();
+  todayMidnight.setHours(1, 0, 0, 0);
+  const todayMidnightTimestamp: number = todayMidnight.getTime();
 
+  let filter = {};
+
+  if (ids.length > 0) {
     filter = {
-      ...filter,
+      id: {
+        $in: ids,
+      },
+    };
+  } else {
+    filter = {
       $or: [
         {
-          modified: { $lt: todayMidnight.getTime() },
+          modified: { $lt: todayMidnightTimestamp },
         },
         {
           modified: { $exists: false },
         },
       ],
     };
-
-    fullGameList = await GameModel.find(filter);
   }
+
+  fullGameList = await GameModel.find(filter);
+
   const gameList: IGame[] = await GameModel.find(filter)
     // .sort({ "plus.from": -1 })
     .limit(100);
@@ -42,20 +50,19 @@ const updateGameList = async (force: boolean = false): Promise<void> => {
     counter++;
   }
 
-  if (
-    force &&
-    fullGameList.length === gameList.length &&
-    fullGameList.length !== 0
-  ) {
-    await Bot.telegram.sendMessage(
-      process.env.TELEGRAM_DEFAULT_ADMIN,
-      `All done\\!`,
-      {
-        parse_mode: "MarkdownV2",
-        disable_web_page_preview: true,
-      }
-    );
-  }
+  // if (
+  //   fullGameList.length === gameList.length &&
+  //   fullGameList.length !== 0
+  // ) {
+  //   await Bot.telegram.sendMessage(
+  //     process.env.TELEGRAM_DEFAULT_ADMIN,
+  //     `All done\\!`,
+  //     {
+  //       parse_mode: "MarkdownV2",
+  //       disable_web_page_preview: true,
+  //     }
+  //   );
+  // }
 
   console.timeEnd("update time");
 };
