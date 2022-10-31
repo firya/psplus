@@ -4,8 +4,8 @@ const connectDB = () => {
   console.log("Try connect to mongo");
   const dbServer =
     process.env.NODE_ENV === "production"
-      ? "164.92.146.117:27018"
-      : "mongo:27017";
+      ? "mongo:27017"
+      : "164.92.146.117:27018";
   mongoose.connect(
     `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@${dbServer}/server`,
     (err) => {
