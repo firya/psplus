@@ -48,7 +48,7 @@ export const gameToMarkdown = (
   game: IGameData,
   tier: boolean = false
 ): string => {
-  const baseUrl = "https://store.playstation.com/concept/";
+  const baseUrl = "https://store.playstation.com/en-US/concept/";
   const name = markdownEscape(game.name);
   return `[${name}](${baseUrl}${game.id}) \\(${tier ? game.tier + " " : ""}${
     game.acessType
