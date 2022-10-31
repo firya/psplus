@@ -2,9 +2,9 @@ import { dayBetween, unixtimeToDate } from "./date";
 
 describe("dayBetween", () => {
   test("Correct", () => {
-    const date1 = new Date(2020, 0, 1).getTime();
-    const date2 = new Date(2020, 0, 2).getTime();
-    expect(dayBetween(date1, date2)).toBe(1);
+    const date1 = new Date(2020, 0, 1, 0, 0, 0).getTime();
+    const date2 = new Date(2020, 0, 2, 14, 0, 0).getTime();
+    expect(dayBetween(date1, date2)).toBe(2);
   });
   test("Correct zero", () => {
     const date1 = new Date(2020, 0, 1).getTime();
