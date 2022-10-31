@@ -23,7 +23,7 @@ export default {
       message = `🎮 Expiring games:\n${expiringGames
         .map(
           (game, i) =>
-            `${i + 1}\\. ${gameToMarkdown(game)} \— \\(${dayBetween(
+            `${i + 1}\\. ${gameToMarkdown(game, true)} \— \\(${dayBetween(
               Date.now(),
               game.to
             )} days\\)`

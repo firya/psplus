@@ -48,13 +48,10 @@ export const getPSStore = async (id: number): Promise<IPlusInfo> => {
     if (tierArr?.length === 2) {
       tier = tierArr[1];
     }
-    let type: string = null;
+    let type: string = "access";
 
     if (new RegExp("stream", "gi").test(psPlusText)) {
       tier = "extra";
-      type = "access";
-    } else if (new RegExp("access", "gi").test(psPlusText)) {
-      type = "access";
     } else if (new RegExp("trial", "gi").test(psPlusText)) {
       type = "trial";
     }
