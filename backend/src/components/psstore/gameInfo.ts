@@ -43,11 +43,17 @@ export const getPSStore = async (id: number): Promise<IPlusInfo> => {
   )?.textContent;
 
   if (psPlusText) {
-    let tier: string = new RegExp("plus ([a-z]+)", "gi").exec(psPlusText)[1];
-    let type: string = "access";
+    let tierArr: string[] = new RegExp("plus ([a-z]+)", "gi").exec(psPlusText);
+    let tier = "";
+    if (tierArr?.length === 2) {
+      tier = tierArr[1];
+    }
+    let type: string = null;
 
     if (new RegExp("stream", "gi").test(psPlusText)) {
       tier = "extra";
+      type = "access";
+    } else if (new RegExp("access", "gi").test(psPlusText)) {
       type = "access";
     } else if (new RegExp("trial", "gi").test(psPlusText)) {
       type = "trial";
@@ -82,7 +88,7 @@ const getRawgData = async (name: string): Promise<IGameData> => {
 
   let result = {};
 
-  if (json.results.length > 0) {
+  if (json.results?.length > 0) {
     result = {
       ...result,
       description: json.results[0].description || "",
@@ -96,8 +102,6 @@ const getRawgData = async (name: string): Promise<IGameData> => {
       modified: Date.now(),
     };
   }
-
-  console.log(result);
 
   return result as IGameData;
 };
