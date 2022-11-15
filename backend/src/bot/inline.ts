@@ -12,7 +12,10 @@ interface ImessageProps {
 }
 
 export default Composer.on("inline_query", async (ctx) => {
-  const { query } = ctx.inlineQuery;
+  const {
+    query,
+    from: { id: userId },
+  } = ctx.inlineQuery;
   const results = await getGameList(query);
 
   return await ctx.answerInlineQuery(
@@ -23,9 +26,10 @@ export default Composer.on("inline_query", async (ctx) => {
       title: item.title,
       description: item.description,
       reply_markup: {
-        inline_keyboard: [
-          [{ text: "Update", callback_data: "update " + item.id }],
-        ],
+        inline_keyboard:
+          userId === parseInt(process.env.TELEGRAM_DEFAULT_ADMIN)
+            ? [[{ text: "Update", callback_data: "update " + item.id }]]
+            : [],
       },
       input_message_content: {
         message_text: item.message,
