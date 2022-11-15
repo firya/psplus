@@ -1,12 +1,18 @@
 import { model, Schema } from "mongoose";
 
-export interface IPlusInfo {
+export type IPlusInfo = {
   from?: number;
   to?: number;
   acessType: string;
   tier: string;
   updated?: boolean;
-}
+};
+
+export type IPlusInfoData =
+  | IPlusInfo
+  | {
+      error: string;
+    };
 
 export interface IGameData {
   description: string;
