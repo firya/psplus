@@ -19,11 +19,12 @@ export const prepareReport = async (): Promise<string> => {
   const DAY_BEFORE: number[] = [14, 30];
   const gameList: IGameData[] = await getGameList();
 
-  var todayMidnight: Date = new Date();
-  todayMidnight.setHours(0, 0, 0, 0);
+  var yesterdayReportTime: Date = new Date();
+  yesterdayReportTime.setDate(yesterdayReportTime.getDate() - 1);
+  yesterdayReportTime.setHours(10, 0, 0, 0);
 
   const newGames: IGameData[] = gameList.filter(
-    (game) => game.tier && game.from > todayMidnight.getTime()
+    (game) => game.tier && game.from > yesterdayReportTime.getTime()
   );
 
   const expiringGames: IGameData[] = gameList.filter(
