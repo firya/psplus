@@ -35,6 +35,7 @@ export default Composer.on("inline_query", async (ctx) => {
         message_text: item.message,
         parse_mode: "Markdown",
       },
+      cache_time: 60 * 60,
     }))
   );
 });

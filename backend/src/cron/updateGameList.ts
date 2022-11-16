@@ -9,7 +9,7 @@ const updateGameList = async (ids: number[] = []): Promise<void> => {
 
   let fullGameList: IGame[] = [];
   let todayMidnight: Date = new Date();
-  todayMidnight.setHours(1, 0, 0, 0);
+  todayMidnight.setHours(12, 0, 0, 0);
   const todayMidnightTimestamp: number = todayMidnight.getTime();
 
   let filter = {};
