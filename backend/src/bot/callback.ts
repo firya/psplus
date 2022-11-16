@@ -1,5 +1,6 @@
 import { Composer } from "telegraf";
 import updateGameList from "../cron/updateGameList";
+import GameModel from "../models/games";
 
 export default Composer.on("callback_query", async (ctx) => {
   if (ctx.callbackQuery.data.indexOf("update") === 0) {
@@ -15,7 +16,12 @@ export default Composer.on("callback_query", async (ctx) => {
       );
 
       if (messageSent?.message_id) {
-        updateGameList([id]);
+        await updateGameList([id]);
+
+        let gameInfo = await GameModel.findOne({
+          id: id,
+        });
+
         await ctx.telegram.editMessageText(
           ctx.callbackQuery.from.id,
           messageSent?.message_id,
