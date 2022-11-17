@@ -2,7 +2,7 @@ import Bot from "../";
 
 export default async (id, msg): Promise<void> => {
   const MSG_LIMIT: number = 9192;
-  const ROW_LIMIT: number = 100;
+  const ROW_LIMIT: number = 50;
   const parts: string[] = msg.match(new RegExp(`.{1,${MSG_LIMIT}}`, "g"));
   if (msg.length > MSG_LIMIT || parts.length > ROW_LIMIT) {
     let message: string = "";

@@ -10,6 +10,7 @@ export default () => async (ctx, next) => {
     "getextra",
     "getpremium",
     "getexpiring",
+    "getnew",
     "reportnow",
   ];
 
