@@ -102,27 +102,31 @@ export const getPSStore = async (id: number): Promise<IPlusInfoData> => {
 };
 
 const getRawgData = async (name: string): Promise<IGameData> => {
-  const rawgData = await fetch(
-    `https://api.rawg.io/api/games?key=${process.env.RAWGIO_TOKEN}&search=${name}&page_size=1`
-  );
-  let json = await rawgData.json();
+  try {
+    const rawgData = await fetch(
+      `https://api.rawg.io/api/games?key=${process.env.RAWGIO_TOKEN}&search=${name}&page_size=1`
+    );
+    let json = await rawgData.json();
 
-  let result = {};
+    let result = {};
 
-  if (json.results?.length > 0) {
-    result = {
-      ...result,
-      description: json.results[0].description || "",
-      metacritic: json.results[0].metacritic || null,
-      background_image: json.results[0].background_image || "",
-      platforms: json.results[0].platforms?.map(
-        (platform) => platform.platform.name
-      ),
-      esrb_rating: json.results[0].esrb_rating?.name || null,
-      released: new Date(json.results[0].released).getTime() || null,
-      modified: Date.now(),
-    };
+    if (json.results?.length > 0) {
+      result = {
+        ...result,
+        description: json.results[0].description || "",
+        metacritic: json.results[0].metacritic || null,
+        background_image: json.results[0].background_image || "",
+        platforms: json.results[0].platforms?.map(
+          (platform) => platform.platform.name
+        ),
+        esrb_rating: json.results[0].esrb_rating?.name || null,
+        released: new Date(json.results[0].released).getTime() || null,
+        modified: Date.now(),
+      };
+    }
+
+    return result as IGameData;
+  } catch (e) {
+    return null;
   }
-
-  return result as IGameData;
 };
