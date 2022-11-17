@@ -14,13 +14,13 @@ export default {
     var dateFrom: Date = new Date();
     dateFrom.setDate(dateFrom.getDate() - MAX_DAYS);
 
-    const newGames = gameList.filter(
-      (game) => game.tier && game.from > dateFrom.getTime()
-    );
+    const newGames = gameList
+      .filter((game) => game.tier && game.from > dateFrom.getTime())
+      .sort((a, b) => b.from - a.from);
 
     let message = "❌ No new games for last " + MAX_DAYS + " days";
     if (newGames.length > 0) {
-      message = `🎮 Expiring games:\n${newGames
+      message = `🎮 New games:\n${newGames
         .map((game, i) => {
           const remainDays = dayBetween(game.from, Date.now());
           return `${i + 1}\\. ${gameToMarkdown(
