@@ -14,6 +14,7 @@ import {
   getextra,
   update,
   getexpiring,
+  getnew,
   loadgamelist,
   forceupdate,
   reportnow,
@@ -60,6 +61,7 @@ Bot.use(
   loadgamelist.run,
   forceupdate.run,
   reportnow.run,
+  getnew.run,
   stop,
   help
 );

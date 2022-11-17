@@ -13,6 +13,7 @@ export const markdownEscape = (text: string, skips: string[] = []): string => {
     [/-/g, "\\-", "hyphens"],
     [/\!/g, "\\!", "exclamation marks"],
     [/\./g, "\\.", "points"],
+    [/\+/g, "\\+", "plus sign"],
   ];
 
   return replacements.reduce(function (string, replacement) {
