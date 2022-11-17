@@ -11,10 +11,12 @@ export default {
     const MAX_DAYS = args[0] || 30;
     const gameList = await getGameList();
 
-    const expiringGames = gameList.filter(
-      (game) =>
-        game.tier && game.to && dayBetween(Date.now(), game.to) <= MAX_DAYS
-    );
+    const expiringGames = gameList
+      .filter(
+        (game) =>
+          game.tier && game.to && dayBetween(Date.now(), game.to) <= MAX_DAYS
+      )
+      .sort((a, b) => a.from - b.from);
 
     let message = "❌ No games expiring in the next " + MAX_DAYS + " days";
     if (expiringGames.length > 0) {
