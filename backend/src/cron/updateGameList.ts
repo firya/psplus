@@ -9,7 +9,7 @@ const updateGameList = async (ids: number[] = []): Promise<void> => {
 
   let fullGameList: IGame[] = [];
   let todayMidnight: Date = new Date();
-  todayMidnight.setHours(12, 0, 0, 0);
+  todayMidnight.setHours(0, 0, 0, 0);
   const todayMidnightTimestamp: number = todayMidnight.getTime();
 
   let filter = {};
@@ -36,16 +36,20 @@ const updateGameList = async (ids: number[] = []): Promise<void> => {
   fullGameList = await GameModel.find(filter);
 
   const gameList: IGame[] = await GameModel.find(filter)
-    // .sort({ "plus.from": -1 })
-    .limit(100);
+    .sort({ "plus.from": -1 })
+    .limit(30);
 
   let counter: number = 0;
   for await (const game of gameList) {
     const gameInfo: IGameInfo | null = await getGameInfo(game);
-    console.log(`${counter}/${gameList.length}`, game.name, gameInfo);
 
     const resUpdate = await updateGame(game, gameInfo);
-    await GameModel.findOneAndUpdate({ id: game.id }, resUpdate);
+
+    const res = await GameModel.findOneAndUpdate({ id: game.id }, resUpdate, {
+      new: true,
+    });
+    
+    console.log(`${counter}/${gameList.length}`, game.namenew Date(res.modified));
 
     counter++;
   }
@@ -74,36 +78,38 @@ export const updateGame = async (
 ): Promise<any> => {
   const update = { $set: { modified: Date.now() } };
 
-  update["$set"]["data"] = gameInfo.data;
+  if (gameInfo) {
+    update["$set"]["data"] = gameInfo.data;
 
-  if (gameInfo?.plus.tier) {
-    if (!game.plus) {
-      update["$set"]["plus"] = {
-        ...gameInfo.plus,
-        from: Date.now(),
-      };
-    } else {
-      if (!game.plus?.from) {
+    if (gameInfo?.plus.tier) {
+      if (!game.plus) {
         update["$set"]["plus"] = {
           ...gameInfo.plus,
           from: Date.now(),
         };
       } else {
-        if (game.plus.to && game.plus.to < Date.now()) {
+        if (!game.plus?.from) {
           update["$set"]["plus"] = {
             ...gameInfo.plus,
             from: Date.now(),
           };
         } else {
-          update["$set"]["plus"] = {
-            ...gameInfo.plus,
-            from: game.plus.from,
-          };
+          if (game.plus.to && game.plus.to < Date.now()) {
+            update["$set"]["plus"] = {
+              ...gameInfo.plus,
+              from: Date.now(),
+            };
+          } else {
+            update["$set"]["plus"] = {
+              ...gameInfo.plus,
+              from: game.plus.from,
+            };
+          }
         }
       }
+    } else if (game.plus?.from) {
+      update["$set"]["plus"] = { ...game.plus, to: Date.now() };
     }
-  } else if (game.plus?.from) {
-    update["$set"]["plus"] = { ...game.plus, to: Date.now() };
   }
 
   return update;
