@@ -16,7 +16,7 @@ new Cron.CronJob(
 );
 
 new Cron.CronJob(
-  "*/3 * * * *",
+  "*/1 * * * *",
   async () => {
     if (process.env.NODE_ENV === "production") {
       await updateGameList();
