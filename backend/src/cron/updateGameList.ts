@@ -48,8 +48,12 @@ const updateGameList = async (ids: number[] = []): Promise<void> => {
     const res = await GameModel.findOneAndUpdate({ id: game.id }, resUpdate, {
       new: true,
     });
-    
-    console.log(`${counter}/${gameList.length}`, game.namenew Date(res.modified));
+
+    console.log(
+      `${counter}/${gameList.length}`,
+      game.name,
+      new Date(res.modified)
+    );
 
     counter++;
   }
